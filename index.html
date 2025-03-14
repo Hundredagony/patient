@@ -5,133 +5,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hospital Management System</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: Arial, sans-serif; 
+        }
+
         body {
             background: url('image.png') no-repeat center center/cover;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
             text-align: center;
+            color: white;
         }
 
         /* Navbar */
         .navbar {
-            position: absolute;
+            position: fixed;
             top: 0;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 50, 0.8);
-            padding: 15px 20px;
-            color: white;
+            background: rgba(0, 0, 50, 0.9);
+            padding: 15px 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
         }
 
         .navbar .logo {
-            font-size: 22px;
+            display: flex;
+            align-items: center;
+            font-size: 24px;
             font-weight: bold;
+        }
+
+        .navbar .logo img {
+            height: 40px;
+            margin-right: 10px;
         }
 
         .nav-links {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
-            font-size: 16px;
-            transition: 0.3s;
+            font-size: 18px;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .nav-links a:hover {
-            color: #007BFF;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
         }
 
-        /* Hero Section */
-        .hero {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero h1 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .hero p {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 20px;
-        }
-
-        /* Buttons */
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .button {
-            background: linear-gradient(135deg, #007BFF, #0056b3);
-            color: white;
-            font-size: 16px;
-            padding: 12px;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: 0.3s;
-            font-weight: bold;
+        /* Welcome & Search */
+        .search-container {
+            position: absolute;
+            top: 35%;
             text-align: center;
+            width: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
         }
 
-        .button:hover {
+        h1 {
+            font-size: 38px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            color: black;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            color: black;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            background: white;
+            border-color: #007BFF;
+        }
+
+        #searchResults {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+            display: none;
+            text-align: left;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        #searchResults li {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            color: black;
+            transition: background 0.3s;
+        }
+
+        #searchResults li:hover {
+            background: #007BFF;
+            color: white;
+        }
+
+        /* Button Styles */
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            background: #007BFF;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 8px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
             background: #0056b3;
+            transform: scale(1.05);
         }
 
-        /* Responsive Design */
-        @media (min-width: 768px) {
-            .hero {
-                width: 600px;
-            }
-            .buttons {
-                flex-direction: row;
-                justify-content: center;
-                gap: 20px;
-            }
-        }
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
     <div class="navbar">
-        <div class="logo">🏥 Hospital System</div>
+        <div class="logo">
+            <img src="logo.png" alt="Hospital Logo">
+            <span>Hospital System</span>
+        </div>
         <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="input-patient.html">Input Data</a>
-            <a href="view-patients.html">View Patients</a>
-            <a href="#">Contact</a>
+            <a href="view-patients.html">📂 View Patients</a>
+            <a href="input-patient.html">➕ Add Patient</a>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <div class="hero">
+    <!-- Welcome & Search -->
+    <div class="search-container">
         <h1>Welcome to the Hospital Management System</h1>
-        <p>Efficiently manage patient data with our advanced platform.</p>
-        <div class="buttons">
-            <a href="input-patient.html" class="button">Input Patient Data</a>
-            <a href="view-patients.html" class="button">View Patients</a>
+        <p>Manage patient data efficiently with our easy-to-use platform.</p>
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search for a patient..." oninput="searchPatients()">
+        <ul id="searchResults"></ul>
+
+        <div class="button-container">
+            <button class="btn" onclick="window.location.href='view-patients.html'">📂 View Patients</button>
+            <button class="btn" onclick="window.location.href='input-patient.html'">➕ Add Patient</button>
         </div>
     </div>
+
+    <script>
+        function searchPatients() {
+            const query = document.getElementById("searchBar").value.toLowerCase();
+            const resultsList = document.getElementById("searchResults");
+            resultsList.innerHTML = "";
+
+            if (!query) {
+                resultsList.style.display = "none";
+                return;
+            }
+
+            const patients = JSON.parse(localStorage.getItem("patients")) || [];
+            const filteredPatients = patients.filter(patient => 
+                patient.name.toLowerCase().includes(query)
+            );
+
+            if (filteredPatients.length === 0) {
+                resultsList.style.display = "none";
+                return;
+            }
+
+            filteredPatients.forEach((patient, index) => {
+                const li = document.createElement("li");
+                li.textContent = patient.name;
+                li.style.cursor = "pointer";
+                li.onclick = () => {
+                    localStorage.setItem("selectedPatientIndex", patients.indexOf(patient));
+                    window.location.href = "patient-details.html"; // Corrected redirection
+                };
+                resultsList.appendChild(li);
+            });
+
+            resultsList.style.display = "block";
+        }
+    </script>
 
 </body>
 </html>

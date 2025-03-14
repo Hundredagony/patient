@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('image.png') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        h1, p {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        h1 { font-size: 26px; margin-bottom: 15px; }
+        p { font-size: 18px; margin: 10px 0; }
+
+        .top-buttons {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .btn {
+            background: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .edit-delete-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .edit-btn {
+            background: #6c757d;
+        }
+
+        .edit-btn:hover {
+            background: #5a6268;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background: #b02a37;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-buttons">
+        <button class="btn" onclick="window.location.href='index.html'">🏠 Home</button>
+        <div>
+            <button class="btn" onclick="window.location.href='view-patients.html'">📂 View Other Patients</button>
+            <button class="btn" onclick="window.location.href='input-patient.html'">➕ Add a Patient</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Patient Details</h1>
+        <p><strong>Name:</strong> <span id="patientName"></span></p>
+        <p><strong>Physician:</strong> <span id="patientPhysician"></span></p>
+        <p><strong>Room No:</strong> <span id="patientRoom"></span></p>
+        <p><strong>Bed No:</strong> <span id="patientBed"></span></p>
+        <p><strong>Source of Admission:</strong> <span id="patientSource"></span></p>
+        <p><strong>Transport Method:</strong> <span id="patientTransport"></span></p>
+        <p><strong>Hospitalization Plan:</strong> <span id="patientPlan"></span></p>
+        <p><strong>Admission Case No:</strong> <span id="patientCaseNo"></span></p>
+        <p><strong>Nurse Station:</strong> <span id="patientNurseStation"></span></p>
+        <p><strong>Medical History:</strong> <span id="patientMedicalHistory"></span></p>
+        <p><strong>Notes:</strong> <span id="patientNotes"></span></p>
+
+        <div class="edit-delete-container">
+            <button class="btn edit-btn" onclick="enableEdit()">✏️ Edit</button>
+            <button class="btn delete-btn" onclick="deletePatient()">🗑 Delete</button>
+        </div>
+    </div>
+
+    <script>
+        const patientIndex = localStorage.getItem("selectedPatientIndex");
+        let patients = JSON.parse(localStorage.getItem("patients")) || [];
+        let patient = patients[patientIndex];
+
+        if (patient) {
+            document.getElementById("patientName").textContent = patient.name || "N/A";
+            document.getElementById("patientPhysician").textContent = patient.physician || "N/A";
+            document.getElementById("patientRoom").textContent = patient.room || "N/A";
+            document.getElementById("patientBed").textContent = patient.bed || "N/A";
+            document.getElementById("patientSource").textContent = patient.source || "N/A";
+            document.getElementById("patientTransport").textContent = patient.transport || "N/A";
+            document.getElementById("patientPlan").textContent = patient.plan || "N/A";
+            document.getElementById("patientCaseNo").textContent = patient.caseNo || "N/A";
+            document.getElementById("patientNurseStation").textContent = patient.nurseStation || "N/A";
+            document.getElementById("patientMedicalHistory").textContent = patient.medicalHistory || "N/A";
+            document.getElementById("patientNotes").textContent = patient.notes || "N/A";
+        }
+
+        function enableEdit() {
+            document.getElementById("patientPhysician").innerHTML = `<input type="text" id="editPhysician" value="${patient.physician || ""}">`;
+            document.getElementById("patientRoom").innerHTML = `<input type="text" id="editRoom" value="${patient.room || ""}">`;
+            document.getElementById("patientBed").innerHTML = `<input type="text" id="editBed" value="${patient.bed || ""}">`;
+            document.getElementById("patientSource").innerHTML = `<input type="text" id="editSource" value="${patient.source || ""}">`;
+            document.getElementById("patientTransport").innerHTML = `<input type="text" id="editTransport" value="${patient.transport || ""}">`;
+            document.getElementById("patientPlan").innerHTML = `<input type="text" id="editPlan" value="${patient.plan || ""}">`;
+            document.getElementById("patientCaseNo").innerHTML = `<input type="text" id="editCaseNo" value="${patient.caseNo || ""}">`;
+            document.getElementById("patientNurseStation").innerHTML = `<input type="text" id="editNurseStation" value="${patient.nurseStation || ""}">`;
+            document.getElementById("patientMedicalHistory").innerHTML = `<textarea id="editMedicalHistory">${patient.medicalHistory || ""}</textarea>`;
+            document.getElementById("patientNotes").innerHTML = `<textarea id="editNotes">${patient.notes || ""}</textarea>`;
+
+            document.querySelector(".edit-delete-container").innerHTML = `
+                <button class="btn edit-btn" onclick="savePatientData()">✔ Save</button>
+                <button class="btn delete-btn" onclick="cancelEdit()">❌ Cancel</button>
+            `;
+        }
+
+        function savePatientData() {
+            patient.physician = document.getElementById("editPhysician").value || "N/A";
+            patient.room = document.getElementById("editRoom").value || "N/A";
+            patient.bed = document.getElementById("editBed").value || "N/A";
+            patient.source = document.getElementById("editSource").value || "N/A";
+            patient.transport = document.getElementById("editTransport").value || "N/A";
+            patient.plan = document.getElementById("editPlan").value || "N/A";
+            patient.caseNo = document.getElementById("editCaseNo").value || "N/A";
+            patient.nurseStation = document.getElementById("editNurseStation").value || "N/A";
+            patient.medicalHistory = document.getElementById("editMedicalHistory").value || "N/A";
+            patient.notes = document.getElementById("editNotes").value || "N/A";
+
+            patients[patientIndex] = patient;
+            localStorage.setItem("patients", JSON.stringify(patients));
+
+            alert("Patient data updated successfully!");
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
