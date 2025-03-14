@@ -1,190 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Patients</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
-        body {
-            background: url('image.png') no-repeat center center/cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            position: relative;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
-
-        /* Back & Input Patient Buttons */
-        .top-buttons {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .top-buttons button {
-            padding: 10px 15px;
-            font-size: 14px;
-            background: linear-gradient(135deg, #007BFF, #0056b3);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s ease;
-        }
-        .top-buttons button:hover {
-            background: #0056b3;
-        }
-
-        /* Patient Name Cards */
-        .patient-card {
-            background: linear-gradient(135deg, #007BFF, #0056b3);
-            color: white;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s ease;
-            text-align: center;
-        }
-        .patient-card:hover {
-            background: #0056b3;
-        }
-
-        /* Hidden Patient Details */
-        .patient-details {
-            display: none;
-            background: #f8f9fa;
-            padding: 12px;
-            margin-top: 8px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            text-align: left;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 8px;
-        }
-        button {
-            padding: 8px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        .edit-btn { background: #007BFF; }
-        .edit-btn:hover { background: #0056b3; }
-        .delete-btn { background: red; }
-        .delete-btn:hover { background: darkred; }
-
-        @media (max-width: 600px) {
-            .buttons {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>View Patients</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+            body {
+                background: url('image.png') no-repeat center center/cover;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                position: relative;
                 flex-direction: column;
-                gap: 5px;
-            }
-        }
-
-    </style>
-</head>
-<body>
-
-    <!-- Back & Input Patient Buttons -->
-    <div class="top-buttons">
-        <button onclick="window.location.href='index.html'">🏠 Home</button>
-        <button onclick="window.location.href='input-patient.html'">➕ Input Patient</button>
-    </div>
-
-    <div class="container">
-        <h1>Patient Records</h1>
-        <div id="patientDataList"></div>
-    </div>
-
-    <script>
-        function displayPatients() {
-            const patients = JSON.parse(localStorage.getItem('patients')) || [];
-            const dataList = document.getElementById('patientDataList');
-            dataList.innerHTML = '';
-
-            if (patients.length === 0) {
-                dataList.innerHTML = "<p>No patient records available.</p>";
-                return;
+                padding: 20px;
             }
 
-            patients.forEach((patient, index) => {
-                const patientCard = document.createElement('div');
-                patientCard.classList.add('patient-card');
-                patientCard.textContent = patient.name;
-                patientCard.onclick = function () {
-                    toggleDetails(index);
-                };
+            .container {
+                width: 90%;
+                max-width: 900px;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
 
-                const patientDetails = document.createElement('div');
-                patientDetails.classList.add('patient-details');
-                patientDetails.id = `details-${index}`;
-                patientDetails.innerHTML = `
-                    <p><strong>Physician:</strong> ${patient.physician}</p>
-                    <p><strong>Room No:</strong> ${patient.room}</p>
-                    <p><strong>Bed No:</strong> ${patient.bed}</p>
-                    <p><strong>Source of Admission:</strong> ${patient.source}</p>
-                    <p><strong>Transport Method:</strong> ${patient.transport}</p>
-                    <p><strong>Hospitalization Plan:</strong> ${patient.plan}</p>
-                    <p><strong>Admission Case No:</strong> ${patient.caseNo}</p>
-                    <p><strong>Nurse Station:</strong> ${patient.nurseStation}</p>
-                    <p><strong>Medical History:</strong> ${patient.medicalHistory || "N/A"}</p>
-                    <p><strong>Notes:</strong> ${patient.notes || "N/A"}</p>
-                    <div class="buttons">
-                        <button class="edit-btn" onclick="editPatient(${index})">Edit</button>
-                        <button class="delete-btn" onclick="deletePatient(${index})">Delete</button>
-                    </div>
-                `;
+            h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
 
-                dataList.appendChild(patientCard);
-                dataList.appendChild(patientDetails);
-            });
-        }
+            /* Back & Input Patient Buttons */
+            .top-buttons {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .top-buttons button {
+                padding: 10px 15px;
+                font-size: 14px;
+                background: linear-gradient(135deg, #007BFF, #0056b3);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: 0.3s ease;
+            }
+            .top-buttons button:hover {
+                background: #0056b3;
+            }
 
-        function toggleDetails(index) {
-            let detailsDiv = document.getElementById(`details-${index}`);
-            detailsDiv.style.display = (detailsDiv.style.display === "block") ? "none" : "block";
-        }
+            /* Patient Name Cards */
+            .patient-card {
+                background: linear-gradient(135deg, #007BFF, #0056b3);
+                color: white;
+                padding: 12px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.3s ease;
+                text-align: center;
+            }
+            .patient-card:hover {
+                background: #0056b3;
+            }
 
-        function deletePatient(index) {
-            let patients = JSON.parse(localStorage.getItem('patients')) || [];
-            patients.splice(index, 1);
-            localStorage.setItem('patients', JSON.stringify(patients));
-            displayPatients();
-        }
+            /* Hidden Patient Details */
+            .patient-details {
+                display: none;
+                background: #f8f9fa;
+                padding: 12px;
+                margin-top: 8px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                text-align: left;
+            }
 
-        function editPatient(index) {
-            window.location.href = `input-patient.html?editIndex=${index}`;
-        }
+            .buttons {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 8px;
+            }
+            button {
+                padding: 8px;
+                border: none;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            .edit-btn { background: #007BFF; }
+            .edit-btn:hover { background: #0056b3; }
+            .delete-btn { background: red; }
+            .delete-btn:hover { background: darkred; }
 
-        window.onload = displayPatients;
-    </script>
+            @media (max-width: 600px) {
+                .buttons {
+                    flex-direction: column;
+                    gap: 5px;
+                }
+            }
 
-</body>
-</html>
+        </style>
+    </head>
+    <body>
+
+        <!-- Back & Input Patient Buttons -->
+        <div class="top-buttons">
+            <button onclick="window.location.href='index.html'">🏠 Home</button>
+            <button onclick="window.location.href='input-patient.html'">➕ Input Patient</button>
+        </div>
+
+        <div class="container">
+            <h1>Patient Records</h1>
+            <div id="patientDataList"></div>
+        </div>
+
+        <script>
+            function displayPatients() {
+                const patients = JSON.parse(localStorage.getItem('patients')) || [];
+                const dataList = document.getElementById('patientDataList');
+                dataList.innerHTML = '';
+
+                if (patients.length === 0) {
+                    dataList.innerHTML = "<p>No patient records available.</p>";
+                    return;
+                }
+
+                patients.forEach((patient, index) => {
+                    const patientCard = document.createElement('div');
+                    patientCard.classList.add('patient-card');
+                    patientCard.textContent = patient.name;
+                    patientCard.onclick = function () {
+                        toggleDetails(index);
+                    };
+
+                    const patientDetails = document.createElement('div');
+                    patientDetails.classList.add('patient-details');
+                    patientDetails.id = `details-${index}`;
+                    patientDetails.innerHTML = `
+                        <p><strong>Physician:</strong> ${patient.physician}</p>
+                        <p><strong>Room No:</strong> ${patient.room}</p>
+                        <p><strong>Bed No:</strong> ${patient.bed}</p>
+                        <p><strong>Source of Admission:</strong> ${patient.source}</p>
+                        <p><strong>Transport Method:</strong> ${patient.transport}</p>
+                        <p><strong>Hospitalization Plan:</strong> ${patient.plan}</p>
+                        <p><strong>Admission Case No:</strong> ${patient.caseNo}</p>
+                        <p><strong>Nurse Station:</strong> ${patient.nurseStation}</p>
+                        <p><strong>Medical History:</strong> ${patient.medicalHistory || "N/A"}</p>
+                        <p><strong>Notes:</strong> ${patient.notes || "N/A"}</p>
+                        <div class="buttons">
+                            <button class="edit-btn" onclick="editPatient(${index})">Edit</button>
+                            <button class="delete-btn" onclick="deletePatient(${index})">Delete</button>
+                        </div>
+                    `;
+
+                    dataList.appendChild(patientCard);
+                    dataList.appendChild(patientDetails);
+                });
+            }
+
+            function toggleDetails(index) {
+                let detailsDiv = document.getElementById(`details-${index}`);
+                detailsDiv.style.display = (detailsDiv.style.display === "block") ? "none" : "block";
+            }
+
+            function deletePatient(index) {
+                let patients = JSON.parse(localStorage.getItem('patients')) || [];
+                patients.splice(index, 1);
+                localStorage.setItem('patients', JSON.stringify(patients));
+                displayPatients();
+            }
+
+            function editPatient(index) {
+                window.location.href = `input-patient.html?editIndex=${index}`;
+            }
+
+            window.onload = displayPatients;
+        </script>
+
+    </body>
+    </html>
