@@ -3,95 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Patients Data</title>
+    <title>View Patients</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('hospital-background.jpg') no-repeat center center/cover;
-            color: #0e0465;
-            height: 100vh;
+            background: url('image.png') no-repeat center center/cover;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
             flex-direction: column;
         }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(0, 0, 50, 0.8); }
-        .hero { flex: 1; display: flex; justify-content: center; align-items: center; text-align: center; }
-        .hero-content {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 40px;
-            border-radius: 15px;
-            border: 3px solid #007BFF;
-            width: 500px;
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .patient-item {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 10px;
+        h1 { font-size: 26px; margin-bottom: 20px; color: #333; }
+        
+        /* Patient Name Cards */
+        .patient-card {
+            background: #0269c3;
+            color: white;
+            padding: 15px;
             margin-bottom: 10px;
             border-radius: 10px;
-            border: 1px solid #fff;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
         }
-        .button-container {
+        .patient-card:hover {
+            background: #0056b3;
+        }
+
+        /* Hidden Patient Details */
+        .patient-details {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            border-left: 5px solid #007BFF;
+        }
+        .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
         }
-        .edit-btn, .delete-btn {
-            padding: 5px 10px;
+        button {
+            padding: 8px 12px;
             border: none;
+            color: white;
             cursor: pointer;
             border-radius: 5px;
             font-weight: bold;
+            transition: 0.3s ease;
         }
-        .edit-btn { background: #007BFF; color: rgb(28, 3, 85); }
-        .delete-btn { background: red; color: rgb(14, 3, 91); }
+        .edit-btn { background: #007BFF; }
+        .edit-btn:hover { background: #0056b3; }
+        .delete-btn { background: red; }
+        .delete-btn:hover { background: darkred; }
+        
+        /* Top Left Buttons */
+        .top-left-buttons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .top-left-buttons button {
+            width: auto;
+            padding: 8px 15px;
+            font-size: 14px;
+            background: #555;
+        }
+        .top-left-buttons button:hover {
+            background: #333;
+        }
+
+        /* Scrollable Patient List */
+        #patientDataList {
+            max-height: 400px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">Logo</a></div>
+
+    <!-- Navigation Buttons -->
+    <div class="top-left-buttons">
+        <button onclick="window.location.href='index.html'">Back to Home</button>
+        <button onclick="window.location.href='input-patient.html'">Input Patient Data</button>
     </div>
 
-    <div class="hero">
-        <div class="hero-content">
-            <h1>Patient Records</h1>
-            <div id="patientDataList"></div>
-        </div>
+    <div class="container">
+        <h1>Patient Records</h1>
+        <div id="patientDataList"></div>
     </div>
 
     <script>
-        function displayStoredData() {
+        function displayPatients() {
             const patients = JSON.parse(localStorage.getItem('patients')) || [];
             const dataList = document.getElementById('patientDataList');
             dataList.innerHTML = '';
 
-            patients.forEach((item, index) => {
-                const patientDiv = document.createElement('div');
-                patientDiv.classList.add('patient-item');
-                patientDiv.innerHTML = `
-                    <p><strong>Name:</strong> ${item.name}</p>
-                    <p><strong>Age:</strong> ${item.age}</p>
-                    <p><strong>Case:</strong> ${item.case}</p>
-                    <p><strong>Patient #:</strong> ${item.patientNumber}</p>
-                    <div class="button-container">
+            if (patients.length === 0) {
+                dataList.innerHTML = "<p>No patient records available.</p>";
+                return;
+            }
+
+            patients.forEach((patient, index) => {
+                const patientCard = document.createElement('div');
+                patientCard.classList.add('patient-card');
+                patientCard.textContent = patient.name;
+                patientCard.onclick = function () {
+                    toggleDetails(index);
+                };
+
+                const patientDetails = document.createElement('div');
+                patientDetails.classList.add('patient-details');
+                patientDetails.id = `details-${index}`;
+                patientDetails.innerHTML = `
+                    <p><strong>Attending Physician:</strong> ${patient.physician}</p>
+                    <p><strong>Room No:</strong> ${patient.room}</p>
+                    <p><strong>Bed No:</strong> ${patient.bed}</p>
+                    <p><strong>Source of Admission:</strong> ${patient.source}</p>
+                    <p><strong>Transport Method:</strong> ${patient.transport}</p>
+                    <p><strong>Hospitalization Plan:</strong> ${patient.plan}</p>
+                    <p><strong>Admission Case No:</strong> ${patient.caseNo}</p>
+                    <p><strong>Nurse Station:</strong> ${patient.nurseStation}</p>
+                    <p><strong>Medical History:</strong> ${patient.medicalHistory || "N/A"}</p>
+                    <p><strong>Notes:</strong> ${patient.notes || "N/A"}</p>
+                    <div class="buttons">
                         <button class="edit-btn" onclick="editPatient(${index})">Edit</button>
                         <button class="delete-btn" onclick="deletePatient(${index})">Delete</button>
                     </div>
                 `;
-                dataList.appendChild(patientDiv);
+
+                dataList.appendChild(patientCard);
+                dataList.appendChild(patientDetails);
             });
         }
 
-        function editPatient(index) {
-            window.location.href = `input-patient.html?editIndex=${index}`;
+        function toggleDetails(index) {
+            let detailsDiv = document.getElementById(`details-${index}`);
+            detailsDiv.style.display = (detailsDiv.style.display === "block") ? "none" : "block";
         }
 
         function deletePatient(index) {
             let patients = JSON.parse(localStorage.getItem('patients')) || [];
             patients.splice(index, 1);
             localStorage.setItem('patients', JSON.stringify(patients));
-            displayStoredData();
+            displayPatients();
         }
 
-        window.onload = displayStoredData;
+        function editPatient(index) {
+            window.location.href = `input-patient.html?editIndex=${index}`;
+        }
+
+        window.onload = displayPatients;
     </script>
+
 </body>
 </html>

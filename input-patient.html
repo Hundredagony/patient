@@ -5,89 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Patient Data</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('hospital-background.jpg') no-repeat center center/cover;
-            color: #12077b;
-            height: 100vh;
+            background: url('image.png') no-repeat center center/cover;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
         }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(0, 0, 50, 0.8); }
-        .hero { flex: 1; display: flex; justify-content: center; align-items: center; text-align: center; }
-        .hero-content {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 40px;
-            border-radius: 15px;
-            border: 3px solid #007BFF;
-            width: 400px;
+
+        /* Smaller Input Form */
+        .container {
+            width: 450px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
-        h1 { font-size: 26px; margin-bottom: 15px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; font-size: 16px; outline: none; }
+        h1 { font-size: 22px; margin-bottom: 15px; }
+
+        /* Form Inputs */
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        textarea { height: 50px; }
+
+        /* Buttons */
         button {
             width: 100%;
-            background: linear-gradient(135deg, #007BFF, #0056b3);
+            background: #007BFF;
             color: white;
-            font-size: 18px;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 14px;
         }
+        button:hover { background: #007BFF; }
+
+        /* Top Left Buttons */
+        .top-left-buttons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .top-left-buttons button {
+            width: auto;
+            padding: 8px 12px;
+            font-size: 14px;
+            background: #555;
+        }
+        .top-left-buttons button:hover {
+            background: #333;
+        }
+
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">Logo</a></div>
+
+    <!-- Navigation Buttons -->
+    <div class="top-left-buttons">
+        <button onclick="window.location.href='index.html'">Back to Home</button>
+        <button onclick="window.location.href='view-patients.html'">View Patient Data</button>
     </div>
 
-    <div class="hero">
-        <div class="hero-content">
-            <h1>Enter Patient Information</h1>
-            <form id="patientForm">
-                <input type="text" id="name" placeholder="Patient Name" required>
-                <input type="number" id="age" placeholder="Age" required>
-                <input type="text" id="case" placeholder="Case Type" required>
-                <input type="text" id="patientNumber" placeholder="Patient #" required>
-                <button type="submit" id="submitBtn">Submit</button>
-            </form>
-        </div>
+    <div class="container">
+        <h1>Enter Patient Details</h1>
+        <form id="patientForm">
+            <input type="text" id="name" placeholder="Patient Name" required>
+            <input type="text" id="physician" placeholder="Attending Physician" required>
+            <input type="text" id="room" placeholder="Room No" required>
+            <input type="text" id="bed" placeholder="Bed No" required>
+            <input type="text" id="source" placeholder="Source of Admission" required>
+            <input type="text" id="transport" placeholder="Transport Method" required>
+            <input type="text" id="plan" placeholder="Hospitalization Plan" required>
+            <input type="text" id="caseNo" placeholder="Admission Case No" required>
+            <input type="text" id="nurseStation" placeholder="Nurse Station" required>
+            <textarea id="medicalHistory" placeholder="Medical History"></textarea>
+            <textarea id="notes" placeholder="Notes"></textarea>
+            <button type="submit">Save Patient</button>
+        </form>
     </div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const editIndex = params.get('editIndex');
-        let patients = JSON.parse(localStorage.getItem('patients')) || [];
-
-        if (editIndex !== null) {
-            document.getElementById('name').value = patients[editIndex].name;
-            document.getElementById('age').value = patients[editIndex].age;
-            document.getElementById('case').value = patients[editIndex].case;
-            document.getElementById('patientNumber').value = patients[editIndex].patientNumber;
-            document.getElementById('submitBtn').textContent = 'Update';
-        }
-
         document.getElementById('patientForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const name = document.getElementById('name').value;
-            const age = document.getElementById('age').value;
-            const caseType = document.getElementById('case').value;
-            const patientNumber = document.getElementById('patientNumber').value;
+            const patient = {
+                name: document.getElementById('name').value,
+                physician: document.getElementById('physician').value,
+                room: document.getElementById('room').value,
+                bed: document.getElementById('bed').value,
+                source: document.getElementById('source').value,
+                transport: document.getElementById('transport').value,
+                plan: document.getElementById('plan').value,
+                caseNo: document.getElementById('caseNo').value,
+                nurseStation: document.getElementById('nurseStation').value,
+                medicalHistory: document.getElementById('medicalHistory').value,
+                notes: document.getElementById('notes').value
+            };
 
-            const newPatient = { name, age, case: caseType, patientNumber };
-
-            if (editIndex !== null) {
-                patients[editIndex] = newPatient;
-            } else {
-                patients.push(newPatient);
-            }
-
+            let patients = JSON.parse(localStorage.getItem('patients')) || [];
+            patients.push(patient);
             localStorage.setItem('patients', JSON.stringify(patients));
-            alert('Patient data saved successfully!');
+
+            alert('Patient data saved!');
             window.location.href = 'view-patients.html';
         });
     </script>
+
 </body>
 </html>
