@@ -131,31 +131,6 @@
             color: white;
         }
 
-        /* Button Styles */
-        .button-container {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .btn {
-            background: #007BFF;
-            color: white;
-            padding: 14px 22px;
-            border-radius: 8px;
-            font-size: 18px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s ease;
-        }
-
-        .btn:hover {
-            background: #0056b3;
-            transform: scale(1.05);
-        }
-
     </style>
 </head>
 <body>
@@ -178,11 +153,6 @@
         <p>Manage patient data efficiently with our easy-to-use platform.</p>
         <input type="text" id="searchBar" class="search-bar" placeholder="Search for a patient..." oninput="searchPatients()">
         <ul id="searchResults"></ul>
-
-        <div class="button-container">
-            <button class="btn" onclick="window.location.href='view-patients.html'">📂 View Patients</button>
-            <button class="btn" onclick="window.location.href='input-patient.html'">➕ Add Patient</button>
-        </div>
     </div>
 
     <script>
