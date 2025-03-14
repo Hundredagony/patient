@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Patients Data</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('hospital-background.jpg') no-repeat center center/cover;
+            color: #0e0465;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(0, 0, 50, 0.8); }
+        .hero { flex: 1; display: flex; justify-content: center; align-items: center; text-align: center; }
+        .hero-content {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid #007BFF;
+            width: 500px;
+        }
+        .patient-item {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #fff;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .edit-btn, .delete-btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .edit-btn { background: #007BFF; color: rgb(28, 3, 85); }
+        .delete-btn { background: red; color: rgb(14, 3, 91); }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">Logo</a></div>
+    </div>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Patient Records</h1>
+            <div id="patientDataList"></div>
+        </div>
+    </div>
+
+    <script>
+        function displayStoredData() {
+            const patients = JSON.parse(localStorage.getItem('patients')) || [];
+            const dataList = document.getElementById('patientDataList');
+            dataList.innerHTML = '';
+
+            patients.forEach((item, index) => {
+                const patientDiv = document.createElement('div');
+                patientDiv.classList.add('patient-item');
+                patientDiv.innerHTML = `
+                    <p><strong>Name:</strong> ${item.name}</p>
+                    <p><strong>Age:</strong> ${item.age}</p>
+                    <p><strong>Case:</strong> ${item.case}</p>
+                    <p><strong>Patient #:</strong> ${item.patientNumber}</p>
+                    <div class="button-container">
+                        <button class="edit-btn" onclick="editPatient(${index})">Edit</button>
+                        <button class="delete-btn" onclick="deletePatient(${index})">Delete</button>
+                    </div>
+                `;
+                dataList.appendChild(patientDiv);
+            });
+        }
+
+        function editPatient(index) {
+            window.location.href = `input-patient.html?editIndex=${index}`;
+        }
+
+        function deletePatient(index) {
+            let patients = JSON.parse(localStorage.getItem('patients')) || [];
+            patients.splice(index, 1);
+            localStorage.setItem('patients', JSON.stringify(patients));
+            displayStoredData();
+        }
+
+        window.onload = displayStoredData;
+    </script>
+</body>
+</html>
