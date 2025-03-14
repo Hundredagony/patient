@@ -9,14 +9,16 @@
         
         body {
             background: url('image.png') no-repeat center center/cover;
-            background-size: cover;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            text-align: center;
         }
 
+        /* Navbar */
         .navbar {
             position: absolute;
             top: 0;
@@ -25,24 +27,24 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(0, 0, 50, 0.8);
-            padding: 15px 50px;
+            padding: 15px 20px;
             color: white;
         }
 
         .navbar .logo {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
-            font-size: 18px;
+            font-size: 16px;
             transition: 0.3s;
         }
 
@@ -50,64 +52,69 @@
             color: #007BFF;
         }
 
+        /* Hero Section */
         .hero {
-            text-align: center;
             background: rgba(255, 255, 255, 0.9);
-            padding: 50px;
+            padding: 40px;
             border-radius: 10px;
-            width: 600px;
+            width: 90%;
+            max-width: 600px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .hero h1 {
-            font-size: 36px;
+            font-size: 28px;
             color: #333;
             margin-bottom: 10px;
         }
 
         .hero p {
-            font-size: 18px;
+            font-size: 16px;
             color: #555;
             margin-bottom: 20px;
         }
 
+        /* Buttons */
         .buttons {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .button {
             background: linear-gradient(135deg, #007BFF, #0056b3);
             color: white;
-            font-size: 18px;
-            padding: 12px 25px;
+            font-size: 16px;
+            padding: 12px;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: 0.3s;
             font-weight: bold;
+            text-align: center;
         }
 
         .button:hover {
             background: #0056b3;
         }
-        
-        @media (max-width: 768px) {
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
             .hero {
-                width: 90%;
-                padding: 30px;
+                width: 600px;
             }
             .buttons {
-                flex-direction: column;
-                gap: 10px;
+                flex-direction: row;
+                justify-content: center;
+                gap: 20px;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- Navbar -->
     <div class="navbar">
-        <div class="logo">Hospital System</div>
+        <div class="logo">🏥 Hospital System</div>
         <div class="nav-links">
             <a href="#">Home</a>
             <a href="input-patient.html">Input Data</a>
@@ -116,6 +123,7 @@
         </div>
     </div>
 
+    <!-- Hero Section -->
     <div class="hero">
         <h1>Welcome to the Hospital Management System</h1>
         <p>Efficiently manage patient data with our advanced platform.</p>

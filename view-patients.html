@@ -14,32 +14,59 @@
             height: 100vh;
             position: relative;
             flex-direction: column;
+            padding: 20px;
         }
+
         .container {
-            width: 80%;
+            width: 90%;
             max-width: 900px;
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             text-align: center;
             max-height: 90vh;
             overflow-y: auto;
         }
-        h1 { font-size: 26px; margin-bottom: 20px; color: #333; }
-        
+
+        h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
+
+        /* Back & Input Patient Buttons */
+        .top-buttons {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .top-buttons button {
+            padding: 10px 15px;
+            font-size: 14px;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+        .top-buttons button:hover {
+            background: #0056b3;
+        }
+
         /* Patient Name Cards */
         .patient-card {
-            background: #0269c3;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
             color: white;
-            padding: 15px;
+            padding: 12px;
             margin-bottom: 10px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s ease;
+            text-align: center;
         }
         .patient-card:hover {
             background: #0056b3;
@@ -49,64 +76,46 @@
         .patient-details {
             display: none;
             background: #f8f9fa;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 10px;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             text-align: left;
-            border-left: 5px solid #007BFF;
         }
+
         .buttons {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 10px;
+            justify-content: space-between;
+            margin-top: 8px;
         }
         button {
-            padding: 8px 12px;
+            padding: 8px;
             border: none;
             color: white;
             cursor: pointer;
             border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s ease;
+            font-size: 14px;
         }
         .edit-btn { background: #007BFF; }
         .edit-btn:hover { background: #0056b3; }
         .delete-btn { background: red; }
         .delete-btn:hover { background: darkred; }
-        
-        /* Top Left Buttons */
-        .top-left-buttons {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        .top-left-buttons button {
-            width: auto;
-            padding: 8px 15px;
-            font-size: 14px;
-            background: #555;
-        }
-        .top-left-buttons button:hover {
-            background: #333;
+
+        @media (max-width: 600px) {
+            .buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
 
-        /* Scrollable Patient List */
-        #patientDataList {
-            max-height: 400px;
-            overflow-y: auto;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Buttons -->
-    <div class="top-left-buttons">
-        <button onclick="window.location.href='index.html'">Back to Home</button>
-        <button onclick="window.location.href='input-patient.html'">Input Patient Data</button>
+    <!-- Back & Input Patient Buttons -->
+    <div class="top-buttons">
+        <button onclick="window.location.href='index.html'">🏠 Home</button>
+        <button onclick="window.location.href='input-patient.html'">➕ Input Patient</button>
     </div>
 
     <div class="container">
@@ -137,7 +146,7 @@
                 patientDetails.classList.add('patient-details');
                 patientDetails.id = `details-${index}`;
                 patientDetails.innerHTML = `
-                    <p><strong>Attending Physician:</strong> ${patient.physician}</p>
+                    <p><strong>Physician:</strong> ${patient.physician}</p>
                     <p><strong>Room No:</strong> ${patient.room}</p>
                     <p><strong>Bed No:</strong> ${patient.bed}</p>
                     <p><strong>Source of Admission:</strong> ${patient.source}</p>
