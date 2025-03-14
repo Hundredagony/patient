@@ -55,7 +55,7 @@
         }
         button:hover { background: #0056b3; }
 
-        /* Top Left Buttons (Now Blue) */
+        /* Top Left Buttons */
         .top-buttons {
             position: absolute;
             top: 15px;
@@ -90,7 +90,7 @@
 </head>
 <body>
 
-    <!-- Matching Blue Buttons -->
+    <!-- Navigation Buttons -->
     <div class="top-buttons">
         <button onclick="window.location.href='index.html'">🏠 Home</button>
         <button onclick="window.location.href='view-patients.html'">📋 View Patients</button>
@@ -100,14 +100,14 @@
         <h1>Enter Patient Details</h1>
         <form id="patientForm">
             <input type="text" id="name" placeholder="Patient Name" required>
-            <input type="text" id="physician" placeholder="Attending Physician" required>
-            <input type="text" id="room" placeholder="Room No" required>
-            <input type="text" id="bed" placeholder="Bed No" required>
-            <input type="text" id="source" placeholder="Source of Admission" required>
-            <input type="text" id="transport" placeholder="Transport Method" required>
-            <input type="text" id="plan" placeholder="Hospitalization Plan" required>
-            <input type="text" id="caseNo" placeholder="Admission Case No" required>
-            <input type="text" id="nurseStation" placeholder="Nurse Station" required>
+            <input type="text" id="physician" placeholder="Attending Physician">
+            <input type="text" id="room" placeholder="Room No">
+            <input type="text" id="bed" placeholder="Bed No">
+            <input type="text" id="source" placeholder="Source of Admission">
+            <input type="text" id="transport" placeholder="Transport Method">
+            <input type="text" id="plan" placeholder="Hospitalization Plan">
+            <input type="text" id="caseNo" placeholder="Admission Case No">
+            <input type="text" id="nurseStation" placeholder="Nurse Station">
             <textarea id="medicalHistory" placeholder="Medical History"></textarea>
             <textarea id="notes" placeholder="Notes"></textarea>
             <button type="submit">Save Patient</button>
@@ -118,18 +118,23 @@
         document.getElementById('patientForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
+            function getValue(id) {
+                let value = document.getElementById(id).value.trim();
+                return value === "" ? "N/A" : value;
+            }
+
             const patient = {
-                name: document.getElementById('name').value,
-                physician: document.getElementById('physician').value,
-                room: document.getElementById('room').value,
-                bed: document.getElementById('bed').value,
-                source: document.getElementById('source').value,
-                transport: document.getElementById('transport').value,
-                plan: document.getElementById('plan').value,
-                caseNo: document.getElementById('caseNo').value,
-                nurseStation: document.getElementById('nurseStation').value,
-                medicalHistory: document.getElementById('medicalHistory').value,
-                notes: document.getElementById('notes').value
+                name: getValue('name'),
+                physician: getValue('physician'),
+                room: getValue('room'),
+                bed: getValue('bed'),
+                source: getValue('source'),
+                transport: getValue('transport'),
+                plan: getValue('plan'),
+                caseNo: getValue('caseNo'),
+                nurseStation: getValue('nurseStation'),
+                medicalHistory: getValue('medicalHistory'),
+                notes: getValue('notes')
             };
 
             let patients = JSON.parse(localStorage.getItem('patients')) || [];
